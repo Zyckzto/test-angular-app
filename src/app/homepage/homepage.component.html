@@ -1,0 +1,43 @@
+<h1>Homepage</h1>
+
+<div *ngIf="(user$ | async) as user; else loadingUser">
+  <h2>
+    <span *ngIf="user.admin">ADMIN</span>
+    <span *ngIf="!user.admin">USER</span>
+    {{user.name}}
+  </h2>
+  <div *ngIf="(items$ | async) as items; else loadingItems">
+    <div *ngIf="user.admin">
+      <select name="item" (change)="onChange($event)" [value]="items[0]">
+        <option *ngFor="let item of items" [value]="item.id">
+          {{item.name}}
+        </option>
+      </select>
+      <br>
+      <select *ngIf="(subItems$ | async) as subItems; else loadingSubItems" name="subitem" [value]="subItems[0]">
+        <option *ngFor="let subitem of subItems" [value]="subitem.id">
+          {{subitem.name}}
+        </option>
+      </select>
+    </div>
+    <div *ngIf="!user.admin">
+      <select name="item">
+        <option *ngFor="let item of items" [value]="item">
+          {{item.name}}
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingUser>
+  <p>Loading user...</p>
+</ng-template>
+
+<ng-template #loadingItems>
+  <p>Loading items...</p>
+</ng-template>
+
+<ng-template #loadingSubItems>
+  <p>Loading subitems...</p>
+</ng-template>
